@@ -45,13 +45,13 @@ words = set(model_2.wv.index_to_key )
 def predictor(text,model):
     text = re_text(text)
     test_vect = np.array([np.array([model_2.wv[i] for i in text if i in words])] )
-    X_test_vect_avg = []
+    x_test_vect_lst = []
     for v in test_vect:
         if v.size:
-            X_test_vect_avg.append(v.mean(axis=0))
+            x_test_vect_lst.append(v.mean(axis=0))
         else:
-            X_test_vect_avg.append(np.zeros(100, dtype=float))
-    y = model.predict(X_test_vect_avg)
+            x_test_vect_lst.append(np.zeros(100, dtype=float))
+    y = model.predict(x_test_vect_lst)
     return dict((v,k) for k,v in model_3.items()).get(y[0])
 
 @app.route('/predict')

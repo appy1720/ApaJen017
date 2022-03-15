@@ -18,12 +18,13 @@ stemmer = SnowballStemmer("german")
 
 app = Flask(__name__)
 
-# Load the model
-model_1 = joblib.load('german_text_classifier_final')
-model_2 = joblib.load('w2v_model_final')
-model_3 = joblib.load('label_final')
+# Load the trained models
+model_1 = joblib.load('german_text_classifier_final') # Random Forest Classifier
+model_2 = joblib.load('w2v_model_final') # word2vec
+model_3 = joblib.load('label_final') #Label encoder
 print(model_1)
 
+# Text Preprocessing after each input
 def re_text(text):
     text = re.sub('http\S+\s*', ' ', text)  # remove URLs
     text = re.sub('#\S+', '', text)  # remove #
@@ -40,7 +41,8 @@ def re_text(text):
     text = [stemmer.stem(word) for word in text]
     return text
 
-words = set(model_2.wv.index_to_key )
+words = set(model_2.wv.index_to_key)
+
 
 def predictor(text,model):
     text = re_text(text)
@@ -57,7 +59,9 @@ def predictor(text,model):
 @app.route('/predict')
 def predict():
     # Retrieve query parameters related to this request.
+    # Please enter german phrase as an api parameter
     german_phrase = request.args.get('german_phrase')
+    # User should see returned label for the 'german_phrase' with status
 
     
     # Use the model to predict the class
